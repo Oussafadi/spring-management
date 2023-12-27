@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}" xmlns="http://www.w3.org/1999/html">
+<head>
+    <title>Edit Département</title>
+
+</head>
+<body>
+
+<section layout:fragment="body" class="py-2">
+    <div th:if="${message}" th:class="${'alert ' +alertClass+' alert-dismissible fade show'}" role="alert">
+        <p class="fw-bold" th:text="${message}"></p>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <div class="container  mt-4 mb-4 shadow-lg rounded p-4 " >
+        <div class="d-flex flex-column align-items-center bg-white p-2">
+            <div class="mb-2">
+                <h2 class="text-primary">Modifier le département :</h2>
+            </div>
+            <div class="container-fluid">
+        <form class="p-6" method="POST" th:action="@{/UpdateDepartement/{dept_id}(dept_id=${dep.getId_dept()})}" th:object="${dep}">
+            <div class="mb-2 form-group">
+                <label for="id_dept" class="form-label fw-bold">Identifiant :</label>
+                <input  type="text" th:field="*{id_dept}" class="form-control" id="id_dept"  readonly>
+            </div>
+             <div class="mb-2 form-group">
+                 <label for="nom" class="form-label fw-bold">Nom :</label>
+                 <input  required type="text" th:field="*{nom_dept}" class="form-control" id="nom" >
+                 <p th:if="${#fields.hasErrors('nom_dept')}" class="text-danger" th:errors="*{nom_dept}"></p>
+             </div>
+            <div class="mt-4 mb-2 d-flex justify-content-center align-items-center">
+                <button type="submit" class="btn btn-success btn-lg" data-bs-dismiss="modal">Modifier</button>
+            </div>
+        </form>
+                </div>
+        </div>
+    </div>
+</section>
+
+
+</body>
+</html>

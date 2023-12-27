@@ -1,13 +1,16 @@
 package com.example.springbootdepartement.Services;
 
+import com.example.springbootdepartement.DTO.DepartementDTO;
 import com.example.springbootdepartement.Models.Departement;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface IDepartementService {
-    List<Departement> getAll();
-    void add(Departement departement);
-    void delete(Departement departement);
-    Departement findDepartement(Double id);
+    List<DepartementDTO> getAll();
+    void add(DepartementDTO departement);
+    void delete(DepartementDTO departement);
+    DepartementDTO findDepartement(int id);
+    void update(DepartementDTO departement);
+    List<DepartementDTO> searchDepartement(String query);
 }
