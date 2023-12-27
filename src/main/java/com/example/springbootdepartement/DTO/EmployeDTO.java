@@ -25,5 +25,5 @@ public class EmployeDTO {
     @Positive(message = "Le salaire doit étre un nombre positive")
     private double salaire;
 
-    private DepartementDTO ref_dep;
+    private Departement ref_dep;
 }

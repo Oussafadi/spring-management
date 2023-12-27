@@ -13,9 +13,7 @@ public class EmployeMapper {
                 .id_emp(emp_dto.getId_emp())
                 .nom(emp_dto.getNom())
                 .salaire(emp_dto.getSalaire())
-                .ref_dep(Optional.ofNullable(emp_dto.getRef_dep())
-                        .map(departementDTO -> DepartementMapper.mapToDepartement(departementDTO))
-                        .orElse(null))
+                .ref_dep(emp_dto.getRef_dep())
                 .build();
         return employe;
     }
@@ -25,9 +23,7 @@ public class EmployeMapper {
                 .id_emp(emp.getId_emp())
                 .nom(emp.getNom())
                 .salaire(emp.getSalaire())
-                .ref_dep(Optional.ofNullable(emp.getRef_dep())
-                        .map(departement -> DepartementMapper.mapToDepartementDTO(departement))
-                        .orElse(null))
+                .ref_dep(emp.getRef_dep())
                 .build();
         return emp_dto;
     }
