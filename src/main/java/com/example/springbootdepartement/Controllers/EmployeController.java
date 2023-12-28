@@ -14,10 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.stream.Collectors;
@@ -73,6 +70,35 @@ public class EmployeController {
         redirectAttributes.addFlashAttribute("message", "Vous avez supprimez l'employé !");
         redirectAttributes.addFlashAttribute("alertClass", "alert-danger");
         return "redirect:/employees";
+    }
+
+    @GetMapping("/EditEmploye/{id}")
+    public String editEmploye(@PathVariable int id , Model model) {
+        EmployeDTO emp_to_edit = service.findEmploye(id);
+        model.addAttribute("employe" , emp_to_edit);
+        model.addAttribute("departements",service_departement.getAll());
+        return "edit-employe";
+    }
+
+    @PostMapping("/UpdateEmploye/{emp_id}")
+    public String updateEmploye(@PathVariable("emp_id") int id_emp ,
+                                    @Valid @ModelAttribute EmployeDTO employe ,
+                                    BindingResult result , RedirectAttributes redirectAttributes ,  @RequestParam int id_dept) {
+        if(result.hasErrors()){
+            FieldError error = result.getFieldError("nom");
+            FieldError error2 = result.getFieldError("salaire");
+            redirectAttributes.addFlashAttribute("message",error.getDefaultMessage());
+            redirectAttributes.addFlashAttribute("message2",error2.getDefaultMessage());
+            redirectAttributes.addFlashAttribute("alertClass", "alert-danger");
+            return "redirect:/EditEmploye/"+id_emp;
+        }
+        employe.setId_emp(id_emp);
+        DepartementDTO departement_dto = service_departement.findDepartement(id_dept);
+        employe.setRef_dep(DepartementMapper.mapToDepartement(departement_dto));
+        service.update(employe);
+        redirectAttributes.addFlashAttribute("message","L'employé est modifié avec succès");
+        redirectAttributes.addFlashAttribute("alertClass", "alert-success");
+        return "redirect:/EditEmploye/"+id_emp ;
     }
 
 
