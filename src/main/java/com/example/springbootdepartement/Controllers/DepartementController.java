@@ -1,6 +1,7 @@
 package com.example.springbootdepartement.Controllers;
 
 import com.example.springbootdepartement.DTO.DepartementDTO;
+import com.example.springbootdepartement.DTO.EmployeDTO;
 import com.example.springbootdepartement.Models.Departement;
 import com.example.springbootdepartement.Services.IDepartementService;
 import jakarta.validation.Valid;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.lang.reflect.Field;
+import java.math.BigDecimal;
+import java.util.List;
 
 @Controller
 public class DepartementController {
@@ -70,6 +73,15 @@ public class DepartementController {
         redirectAttributes.addFlashAttribute("message","Le département est modifié avec succès");
         redirectAttributes.addFlashAttribute("alertClass", "alert-success");
         return "redirect:/EditDepartement/"+id_dept ;
+    }
+
+    @GetMapping("/ShowEmployees/{id_dep}")
+    public String showEmployees(@PathVariable("id_dep") int id_dep ,Model model) {
+           DepartementDTO dep_dto = service.findDepartement(id_dep);
+           List<EmployeDTO> employees = dep_dto.getEmployes();
+           model.addAttribute("employees",employees);
+           model.addAttribute("departement_parent",dep_dto);
+           return "employees";
     }
 
 

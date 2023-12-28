@@ -26,6 +26,14 @@
                 <li class="nav-item">
                     <a class="nav-link fw-bold " th:href="@{/employees}" ><i class="fa fa-user fw-bold" aria-hidden="true"></i> Employés </a>
                 </li>
+                <li>
+                    <form th:action="@{/Search}" method="GET">
+                        <input name="query" placeholder="Recherchez ..." required/>
+                        <button class="btn btn-success" type="submit"> <i
+                                class="fa fa-eye"></i>
+                        </button>
+                    </form>
+                </li>
             </ul>
         </div>
     </div>
