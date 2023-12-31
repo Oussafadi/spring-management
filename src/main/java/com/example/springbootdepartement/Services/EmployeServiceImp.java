@@ -57,8 +57,9 @@ public class EmployeServiceImp implements IEmployeService{
         repository.save(EmployeMapper.mapToEmploye(employe));
     }
 
+
     @Override
-    public List<EmployeDTO> searchDepartement(String query) {
+    public List<EmployeDTO> searchEmploye(String query) {
         List<Employe>employes = repository.searchEmploye(query);
         return employes.stream()
                 .map(emp -> EmployeMapper.mapToEmployeDTO(emp))

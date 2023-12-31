@@ -25,7 +25,11 @@
     </div>
     <div class="container bg-white mt-4 mb-4 shadow-lg rounded p-4 " >
         <div class="d-flex justify-content-between p-2">
+            <div class="d-flex justify-content-center align-items-center gap-1">
             <h2 class="text-primary "> Liste des employés </h2>
+            <p th:if="${departement_parent}" class="text-warning fw-bold"
+               th:text=" 'Département : '+ ${(departement_parent).getNom_dept()}  "></p>
+            </div>
             <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#addModal"> Ajouter un employé <i class="fa fa-plus" aria-hidden="true"></i></button>
         </div>
         <div class="row mt-4">

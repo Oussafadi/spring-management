@@ -17,6 +17,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Controller
@@ -44,8 +45,12 @@ public class EmployeController {
         if(result.hasErrors()){
             FieldError error = result.getFieldError("nom");
             FieldError error2 = result.getFieldError("salaire");
-            redirectAttributes.addFlashAttribute("message",error.getDefaultMessage());
-            redirectAttributes.addFlashAttribute("message2",error2.getDefaultMessage());
+            if(error!=null) {
+                redirectAttributes.addFlashAttribute("message", error.getDefaultMessage());
+            }
+            if( error2!=null) {
+                redirectAttributes.addFlashAttribute("message2", error2.getDefaultMessage());
+            }
             redirectAttributes.addFlashAttribute("alertClass", "alert-danger");
             return "redirect:/employees";
         }
@@ -82,13 +87,17 @@ public class EmployeController {
 
     @PostMapping("/UpdateEmploye/{emp_id}")
     public String updateEmploye(@PathVariable("emp_id") int id_emp ,
-                                    @Valid @ModelAttribute EmployeDTO employe ,
+                                    @Valid @ModelAttribute("employe") EmployeDTO employe ,
                                     BindingResult result , RedirectAttributes redirectAttributes ,  @RequestParam int id_dept) {
         if(result.hasErrors()){
             FieldError error = result.getFieldError("nom");
             FieldError error2 = result.getFieldError("salaire");
-            redirectAttributes.addFlashAttribute("message",error.getDefaultMessage());
-            redirectAttributes.addFlashAttribute("message2",error2.getDefaultMessage());
+            if(error!=null) {
+                redirectAttributes.addFlashAttribute("message", error.getDefaultMessage());
+            }
+            if(error2!=null) {
+                redirectAttributes.addFlashAttribute("message2", error2.getDefaultMessage());
+            }
             redirectAttributes.addFlashAttribute("alertClass", "alert-danger");
             return "redirect:/EditEmploye/"+id_emp;
         }
@@ -99,6 +108,30 @@ public class EmployeController {
         redirectAttributes.addFlashAttribute("message","L'employé est modifié avec succès");
         redirectAttributes.addFlashAttribute("alertClass", "alert-success");
         return "redirect:/EditEmploye/"+id_emp ;
+    }
+
+    @GetMapping("/Search")
+    public String search(@RequestParam String query, Model model,
+    RedirectAttributes redirectAttributes) {
+        List<DepartementDTO> departements = service_departement.searchDepartement(query);
+        List<EmployeDTO> employees = service.searchEmploye(query);
+        if(!departements.isEmpty()) {
+            model.addAttribute("departements",departements);
+            DepartementDTO dep = new DepartementDTO();
+            model.addAttribute("dep",dep);
+            return "departements";
+        }
+        if(!employees.isEmpty()) {
+            model.addAttribute("employees",employees);
+            EmployeDTO employe = new EmployeDTO();
+            model.addAttribute("emp_dto",employe);
+            model.addAttribute("departements",service_departement.getAll());
+            return "employees";
+        }
+
+        redirectAttributes.addFlashAttribute("message","Aucun résultat ne correspond à votre recherche .");
+        redirectAttributes.addFlashAttribute("alertClass", "alert-info");
+        return "redirect:/home";
     }
 
 

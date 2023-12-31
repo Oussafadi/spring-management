@@ -13,4 +13,6 @@ public interface IDepartementService {
     DepartementDTO findDepartement(int id);
     void update(DepartementDTO departement);
     List<DepartementDTO> searchDepartement(String query);
+    Optional<DepartementDTO> lePlusGrandDepartement(List<DepartementDTO> departements);
+    double masseSalariale(List<DepartementDTO> departements);
 }

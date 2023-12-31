@@ -32,6 +32,8 @@
                     <td class="fw-bold" >Identifiant</td>
                     <td class="fw-bold">Nom</td>
                     <td class="fw-bold">Nombre d'employés</td>
+                    <td class="fw-bold">Masse Salariale</td>
+                    <td class="fw-bold"> Employés </td>
                     <td colspan="2" class="fw-bold">Actions</td>
                 </tr>
                 </thead>
@@ -39,7 +41,17 @@
                 <tr th:each="dep :${departements}">
                     <td th:text="${dep.getId_dept()}"></td>
                     <td th:text="${dep.getNom_dept()}" ></td>
-                    <td th:text="${dep.employes.size()}" ></td>
+                    <td th:text="${dep.getEmployes().size()}" ></td>
+                    <td th:with="salaries=${dep.getEmployes().![salaire]}" >
+                        <span th:text="${#aggregates.sum(salaries)}"></span>
+                    </td>
+                    <td>
+                        <form th:action="@{/ShowEmployees/{id_dep}(id_dep=${dep.getId_dept()})}" method="GET">
+                            <button class="btn btn-success" type="submit"> <i
+                                    class="fa fa-eye"></i>
+                            </button>
+                        </form>
+                    </td>
                     <td>
                         <form th:action="@{/DeleteDepartement}" method="POST" onsubmit="return confirmDelete();">
                             <input type=hidden th:name="id" th:value="${dep.getId_dept()}"   required/>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}" xmlns="http://www.w3.org/1999/html">
+<head>
+    <title>DashBoard</title>
+
+</head>
+<body>
+
+<section layout:fragment="body" class="py-2">
+    <div class="d-flex justify-content-start mb-4">
+        <h1 class="text-primary">Dashboard</h1>
+    </div>
+    <div class="row">
+            <div class="col-lg-4">
+                <div class="card border-start border-0 border-5 border-primary shadow">
+                    <div class="card-body">
+                        <h4 class="card-title text-secondary">Nombre d'employés</h4>
+                        <h3 th:text="${nombre_employes}" class="card-text mb-0 text-primary"></h3>
+                    </div>
+                </div>
+            </div>
+        <div class="col-lg-4">
+            <div class="card border-start border-0 border-5 border-primary shadow">
+                <div class="card-body">
+                    <h4 class="card-title text-secondary">Le plus grand département </h4>
+                    <h3 th:text="${grand_departement}" class="card-text mb-0 text-primary"></h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card border-start border-0 border-5 border-primary shadow">
+                <div class="card-body">
+                    <h4 class="card-title text-secondary">La masse salariale</h4>
+                    <h3 th:text="${masse_salariale}" class="card-text mb-0 text-primary"></h3>
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+</section>
+
+
+</body>
+</html>

@@ -13,5 +13,5 @@ public interface IEmployeService {
     void delete(EmployeDTO employe);
     EmployeDTO findEmploye(int id);
     void update(EmployeDTO employe);
-    List<EmployeDTO> searchDepartement(String query);
+    List<EmployeDTO> searchEmploye(String query);
 }
