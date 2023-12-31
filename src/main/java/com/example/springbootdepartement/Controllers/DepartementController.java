@@ -4,6 +4,7 @@ import com.example.springbootdepartement.DTO.DepartementDTO;
 import com.example.springbootdepartement.DTO.EmployeDTO;
 import com.example.springbootdepartement.Models.Departement;
 import com.example.springbootdepartement.Services.IDepartementService;
+import com.example.springbootdepartement.Services.IEmployeService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,15 +16,32 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class DepartementController {
        private IDepartementService service ;
+       private IEmployeService service_employe ;
        @Autowired
-       public DepartementController(IDepartementService service) {
+       public DepartementController(IDepartementService service , IEmployeService service_employe) {
              this.service = service;
+             this.service_employe = service_employe;
          }
+
+
+    @GetMapping("/")
+    public String dashboard(Model model) {
+           List<EmployeDTO> employees = service_employe.getAll();
+           model.addAttribute("nombre_employes", employees.size());
+           List<DepartementDTO> departements = service.getAll();
+          Optional<DepartementDTO> grand_departement= service.lePlusGrandDepartement(departements);
+          grand_departement.ifPresent(departementDTO ->
+                  model.addAttribute("grand_departement",departementDTO.getNom_dept()));
+          model.addAttribute("masse_salariale", service.masseSalariale(departements));
+           return "dashboard";
+    }
 
     @GetMapping("/home")
     public String home(Model model){
@@ -38,7 +56,9 @@ public class DepartementController {
                                   BindingResult result ,RedirectAttributes redirectAttributes) {
           if(result.hasErrors()){
               FieldError error = result.getFieldError("nom_dept");
-              redirectAttributes.addFlashAttribute("message",error.getDefaultMessage());
+              if(error != null) {
+                  redirectAttributes.addFlashAttribute("message", error.getDefaultMessage());
+              }
               redirectAttributes.addFlashAttribute("alertClass", "alert-danger");
               return "redirect:/home";
           }
@@ -51,6 +71,11 @@ public class DepartementController {
     @PostMapping("/DeleteDepartement")
     public String deleteDepartement(@RequestParam int id ,RedirectAttributes redirectAttributes ) {
            DepartementDTO dep_to_delete = service.findDepartement(id);
+           List<EmployeDTO> employees_orphan = dep_to_delete.getEmployes();
+            employees_orphan.stream().forEach(employe -> {
+                                employe.setRef_dep(null);
+                                service_employe.update(employe);
+                            });
            service.delete(dep_to_delete);
         redirectAttributes.addFlashAttribute("message", "Vous avez supprimez le département !");
         redirectAttributes.addFlashAttribute("alertClass", "alert-danger");
@@ -68,6 +93,14 @@ public class DepartementController {
     public String updateDepartement(@PathVariable("id_dept") int id_dept ,
                                     @Valid @ModelAttribute DepartementDTO departement ,
                                     BindingResult result , RedirectAttributes redirectAttributes) {
+        if(result.hasErrors()){
+            FieldError error = result.getFieldError("nom_dept");
+            if(error != null) {
+                redirectAttributes.addFlashAttribute("message", error.getDefaultMessage());
+            }
+            redirectAttributes.addFlashAttribute("alertClass", "alert-danger");
+            return "redirect:/EditDepartement/"+id_dept;
+        }
         departement.setId_dept(id_dept);
         service.update(departement);
         redirectAttributes.addFlashAttribute("message","Le département est modifié avec succès");
@@ -81,7 +114,10 @@ public class DepartementController {
            List<EmployeDTO> employees = dep_dto.getEmployes();
            model.addAttribute("employees",employees);
            model.addAttribute("departement_parent",dep_dto);
-           return "employees";
+            EmployeDTO employe = new EmployeDTO();
+            model.addAttribute("emp_dto",employe);
+        model.addAttribute("departements",service.getAll());
+               return "employees";
     }
 
 

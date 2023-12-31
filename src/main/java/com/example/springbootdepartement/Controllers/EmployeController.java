@@ -45,8 +45,12 @@ public class EmployeController {
         if(result.hasErrors()){
             FieldError error = result.getFieldError("nom");
             FieldError error2 = result.getFieldError("salaire");
-            redirectAttributes.addFlashAttribute("message",error.getDefaultMessage());
-            redirectAttributes.addFlashAttribute("message2",error2.getDefaultMessage());
+            if(error!=null) {
+                redirectAttributes.addFlashAttribute("message", error.getDefaultMessage());
+            }
+            if( error2!=null) {
+                redirectAttributes.addFlashAttribute("message2", error2.getDefaultMessage());
+            }
             redirectAttributes.addFlashAttribute("alertClass", "alert-danger");
             return "redirect:/employees";
         }
@@ -83,13 +87,17 @@ public class EmployeController {
 
     @PostMapping("/UpdateEmploye/{emp_id}")
     public String updateEmploye(@PathVariable("emp_id") int id_emp ,
-                                    @Valid @ModelAttribute EmployeDTO employe ,
+                                    @Valid @ModelAttribute("employe") EmployeDTO employe ,
                                     BindingResult result , RedirectAttributes redirectAttributes ,  @RequestParam int id_dept) {
         if(result.hasErrors()){
             FieldError error = result.getFieldError("nom");
             FieldError error2 = result.getFieldError("salaire");
-            redirectAttributes.addFlashAttribute("message",error.getDefaultMessage());
-            redirectAttributes.addFlashAttribute("message2",error2.getDefaultMessage());
+            if(error!=null) {
+                redirectAttributes.addFlashAttribute("message", error.getDefaultMessage());
+            }
+            if(error2!=null) {
+                redirectAttributes.addFlashAttribute("message2", error2.getDefaultMessage());
+            }
             redirectAttributes.addFlashAttribute("alertClass", "alert-danger");
             return "redirect:/EditEmploye/"+id_emp;
         }

@@ -19,6 +19,6 @@ public class Departement {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id_dept ;
     private String nom_dept;
-    @OneToMany(mappedBy = "ref_dep",fetch =FetchType.EAGER,cascade = CascadeType.ALL )
+    @OneToMany(mappedBy = "ref_dep",fetch =FetchType.EAGER,cascade = CascadeType.DETACH )
     private List<Employe> employes;
 }

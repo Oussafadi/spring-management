@@ -15,7 +15,7 @@ public class EmployeDTO {
     private int id_emp ;
 
     @NotEmpty(message = "Le nom de l'employé ne peut pas etre vide")
-    @Pattern(regexp = "^[a-zA-Z ]+$", message = "Le nom doit avoir que des caractères")
+    @Pattern(regexp = "^[a-zA-ZÀ-ÿ ]+$", message = "Le nom doit avoir que des caractères")
     @Size(min=3,max =30 ,message = "le nom doit avoit entre 3 et 30 caractères")
     private String nom ;
 

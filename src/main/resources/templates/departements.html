@@ -41,14 +41,12 @@
                 <tr th:each="dep :${departements}">
                     <td th:text="${dep.getId_dept()}"></td>
                     <td th:text="${dep.getNom_dept()}" ></td>
-                    <td th:text="${dep.employes.size()}" ></td>
-                    <td th:text="${#numbers.formatDecimal(dep.getEmployes().stream()
-                    .map(EmployeDTO::getSalaire)
-                    .reduce(0d,Double::sum),2, 'POINT', 'GROUPING')}" >
+                    <td th:text="${dep.getEmployes().size()}" ></td>
+                    <td th:with="salaries=${dep.getEmployes().![salaire]}" >
+                        <span th:text="${#aggregates.sum(salaries)}"></span>
                     </td>
                     <td>
                         <form th:action="@{/ShowEmployees/{id_dep}(id_dep=${dep.getId_dept()})}" method="GET">
-                            <input type=hidden name="id" value="${dep.getId_dept()}"  required/>
                             <button class="btn btn-success" type="submit"> <i
                                     class="fa fa-eye"></i>
                             </button>
