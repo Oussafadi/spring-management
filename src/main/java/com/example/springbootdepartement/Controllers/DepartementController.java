@@ -62,10 +62,15 @@ public class DepartementController {
               redirectAttributes.addFlashAttribute("alertClass", "alert-danger");
               return "redirect:/home";
           }
-           service.add(departement);
-           redirectAttributes.addFlashAttribute("message", "Vous avez ajouter un nouveau département !");
-          redirectAttributes.addFlashAttribute("alertClass", "alert-success");
-           return "redirect:/home";
+          if(service.isNameUnique(departement.getNom_dept())) {
+              service.add(departement);
+              redirectAttributes.addFlashAttribute("message", "Vous avez ajouter un nouveau département !");
+              redirectAttributes.addFlashAttribute("alertClass", "alert-success");
+          }else {
+              redirectAttributes.addFlashAttribute("message", "Un Département avec le meme nom existe déja ");
+              redirectAttributes.addFlashAttribute("alertClass", "alert-danger");
+          }
+        return "redirect:/home";
     }
 
     @PostMapping("/DeleteDepartement")
@@ -91,7 +96,7 @@ public class DepartementController {
 
     @PostMapping("/UpdateDepartement/{id_dept}")
     public String updateDepartement(@PathVariable("id_dept") int id_dept ,
-                                    @Valid @ModelAttribute DepartementDTO departement ,
+                                    @Valid @ModelAttribute("dep") DepartementDTO departement ,
                                     BindingResult result , RedirectAttributes redirectAttributes) {
         if(result.hasErrors()){
             FieldError error = result.getFieldError("nom_dept");
@@ -101,10 +106,16 @@ public class DepartementController {
             redirectAttributes.addFlashAttribute("alertClass", "alert-danger");
             return "redirect:/EditDepartement/"+id_dept;
         }
-        departement.setId_dept(id_dept);
-        service.update(departement);
-        redirectAttributes.addFlashAttribute("message","Le département est modifié avec succès");
-        redirectAttributes.addFlashAttribute("alertClass", "alert-success");
+        if(service.isNameUnique(departement.getNom_dept())) {
+            departement.setId_dept(id_dept);
+            service.update(departement);
+            redirectAttributes.addFlashAttribute("message","Le département est modifié avec succès");
+            redirectAttributes.addFlashAttribute("alertClass", "alert-success");
+        }else {
+            redirectAttributes.addFlashAttribute("message", "Un Département avec le meme nom existe déja ");
+            redirectAttributes.addFlashAttribute("alertClass", "alert-danger");
+        }
+
         return "redirect:/EditDepartement/"+id_dept ;
     }
 
