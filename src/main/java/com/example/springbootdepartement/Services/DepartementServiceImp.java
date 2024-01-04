@@ -75,4 +75,10 @@ public class DepartementServiceImp implements IDepartementService{
         }
         return masse_salariale;
     }
+
+    @Override
+    public boolean isNameUnique(String name) {
+        return !this.repository.existsByNom_dept(name);
+    }
+
 }

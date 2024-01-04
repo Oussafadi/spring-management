@@ -15,4 +15,5 @@ public interface IDepartementService {
     List<DepartementDTO> searchDepartement(String query);
     Optional<DepartementDTO> lePlusGrandDepartement(List<DepartementDTO> departements);
     double masseSalariale(List<DepartementDTO> departements);
+    boolean isNameUnique(String name);
 }
